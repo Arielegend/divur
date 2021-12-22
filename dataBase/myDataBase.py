@@ -1,5 +1,6 @@
 import json
 import sqlite3
+from sqlite3 import OperationalError
 
 import pandas as pd
 
@@ -25,10 +26,13 @@ class MyDataBase:
     def Create_Connection(self):
         """ create a database connection to a SQLite database """
         try:
+            print(f"MyDataBase -- Create_Connection -- Starting connection with dataBase path: {dataBasePath}")
             self.con = sqlite3.connect(dataBasePath)
             self.cursor = self.con.cursor()
             self.dataBasePath = dataBasePath
             print("MyDataBase -- Create_Connection -- Done successfully")
+        except OperationalError as e:
+            print("OperationalError\n", e)
         except Error as e:
             print(e)
 
@@ -142,5 +146,3 @@ class MyDataBase:
                 self.Add_Port_Row(port)
             Clear_Sheet(sheetName="Ports")
             return
-
-
